@@ -58,7 +58,7 @@ class RedisController extends BaseController
                 'conn'        => $connection,
                 'info'        => $manager->getInformation(),
                 'connections' => $manager->getConnections(),
-                'data'        => $manager->fetch($request->get('key')),
+                'data'        => $manager->fetch(str_replace(config('database.redis.options.prefix'),'',$request->get('key'))),
             ];
 
             if (empty($variables['data'])) {
@@ -129,7 +129,7 @@ class RedisController extends BaseController
      */
     public function destroy(Request $request)
     {
-        return $this->manager()->del($request->get('key'));
+        return $this->manager()->del(str_replace(config('database.redis.options.prefix'),'',$request->get('key')));
     }
 
     /**
@@ -161,7 +161,8 @@ class RedisController extends BaseController
      */
     public function update(Request $request)
     {
-        return $this->manager()->update($request);
+        $this->manager()->update($request);
+        return redirect(route('redis-index'));
     }
 
     /**

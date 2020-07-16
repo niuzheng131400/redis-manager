@@ -174,7 +174,8 @@ class RedisManager extends Extension
         $keys = [];
 
         foreach (new Keyspace($client->client(), $pattern) as $item) {
-            $keys[] = $item;
+
+            $keys[] = str_replace(config('database.redis.options.prefix'), '', $item);
 
             if (count($keys) == $count) {
                 break;
